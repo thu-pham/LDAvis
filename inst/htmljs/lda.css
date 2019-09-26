@@ -18,6 +18,7 @@ path {
 }
 
 text {
-    font-family: sans-serif;
-    font-size: 11px;
+    font-family: Helvetica;
+    font-size: 14px;
+    font-weight:300;
 }

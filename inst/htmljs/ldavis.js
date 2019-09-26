@@ -31,28 +31,28 @@ LDAvis = function(to_select, json_file) {
         old: 1,
         current: 1
     },
-    color1 = "#1f77b4", // baseline color for default topic circles and overall term frequencies
-    color2 = "#d62728"; // 'highlight' color for selected topics and term-topic frequencies
+    color1 = "#034FDB", // baseline color for default topic circles and overall term frequencies
+    color2 = "#DF3FF9"; // 'highlight' color for selected topics and term-topic frequencies
 
     // Set the duration of each half of the transition:
     var duration = 750;
 
     // Set global margins used for everything
     var margin = {
-        top: 30,
-        right: 30,
+        top: 40,
+        right: 40,
         bottom: 70,
-        left: 30
+        left: 40
     },
-    mdswidth = 530,
-    mdsheight = 530,
-    barwidth = 530,
-    barheight = 530,
-    termwidth = 90, // width to add between two panels to display terms
+    mdswidth = 300,
+    mdsheight = 300,
+    barwidth = 350,
+    barheight = 300,
+    termwidth = 125, // width to add between two panels to display terms
     mdsarea = mdsheight * mdswidth;
     // controls how big the maximum circle can be
     // doesn't depend on data, only on mds width and height:
-    var rMax = 60;  
+    var rMax = 45;  
 
     // proportion of area of MDS plot to which the sum of default topic circle areas is set
     var circle_prop = 0.25;
@@ -323,7 +323,7 @@ LDAvis = function(to_select, json_file) {
                 .attr('class', "circleGuide" + size)
                 .attr('r', rSize)
                 .attr('cx', cx)
-                .attr('cy', mdsheight + rSize)
+                .attr('cy', mdsheight + 50 + rSize)
                 .style('fill', 'none')
                 .style('stroke-dasharray', '2 2')
                 .style('stroke', '#999');
@@ -331,8 +331,8 @@ LDAvis = function(to_select, json_file) {
                 .attr('class', "lineGuide" + size)
                 .attr("x1", cx)
                 .attr("x2", cx2)
-                .attr("y1", mdsheight + 2 * rSize)
-                .attr("y2", mdsheight + 2 * rSize)
+                .attr("y1", mdsheight + 50 + 2 * rSize)
+                .attr("y2", mdsheight + 50 + 2 * rSize)
                 .style("stroke", "gray")
                 .style("opacity", 0.3);
         }
@@ -347,26 +347,26 @@ LDAvis = function(to_select, json_file) {
 
         d3.select("#leftpanel").append("text")
             .attr("x", 10)
-            .attr("y", mdsheight - 10)
+            .attr("y", mdsheight + 40)
             .attr('class', "circleGuideTitle")
             .style("text-anchor", "left")
             .style("fontWeight", "bold")
             .text("Marginal topic distribution");
         d3.select("#leftpanel").append("text")
             .attr("x", cx2 + 10)
-            .attr("y", mdsheight + 2 * newSmall)
+            .attr("y", mdsheight + 50 + 2 * newSmall)
             .attr('class', "circleGuideLabelSmall")
             .style("text-anchor", "start")
             .text(defaultLabelSmall);
         d3.select("#leftpanel").append("text")
             .attr("x", cx2 + 10)
-            .attr("y", mdsheight + 2 * newMedium)
+            .attr("y", mdsheight + 50 + 2 * newMedium)
             .attr('class', "circleGuideLabelMedium")
             .style("text-anchor", "start")
             .text(defaultLabelMedium);
         d3.select("#leftpanel").append("text")
             .attr("x", cx2 + 10)
-            .attr("y", mdsheight + 2 * newLarge)
+            .attr("y", mdsheight + 50 + 2 * newLarge)
             .attr('class', "circleGuideLabelLarge")
             .style("text-anchor", "start")
             .text(defaultLabelLarge);
@@ -500,23 +500,35 @@ LDAvis = function(to_select, json_file) {
 
 	// footnotes:
         d3.select("#bar-freqs")
+            .append("text")
+            .attr("x", 0)
+            .attr("y", mdsheight + 10 + (6/2)*barguide.height + 5)
+            .style("dominant-baseline", "middle")
+            .text("1. saliency(term w) = frequency(w) * [sum_t p(t | w) * log(p(t | w)/p(t))] for topics t;");
+        d3.select("#bar-freqs")
             .append("a")
             .attr("xlink:href", "http://vis.stanford.edu/files/2012-Termite-AVI.pdf")
             .attr("target", "_blank")
             .append("text")
             .attr("x", 0)
-            .attr("y", mdsheight + 10 + (6/2)*barguide.height + 5)
+            .attr("y", mdsheight + 10 + (8/2)*barguide.height + 5)
             .style("dominant-baseline", "middle")
-            .text("1. saliency(term w) = frequency(w) * [sum_t p(t | w) * log(p(t | w)/p(t))] for topics t; see Chuang et. al (2012)");
+            .text("   see Chuang et. al (2012)");
+        d3.select("#bar-freqs")
+            .append("text")
+            .attr("x", 0)
+            .attr("y", mdsheight + 10 + (10/2)*barguide.height + 5)
+            .style("dominant-baseline", "middle")
+            .text("2. relevance(term w | topic t) = \u03BB * p(w | t) + (1 - \u03BB) * p(w | t)/p(w);");
         d3.select("#bar-freqs")
             .append("a")
             .attr("xlink:href", "http://nlp.stanford.edu/events/illvi2014/papers/sievert-illvi2014.pdf")
             .attr("target", "_blank")
             .append("text")
             .attr("x", 0)
-            .attr("y", mdsheight + 10 + (8/2)*barguide.height + 5)
+            .attr("y", mdsheight + 10 + (12/2)*barguide.height + 5)
             .style("dominant-baseline", "middle")
-            .text("2. relevance(term w | topic t) = \u03BB * p(w | t) + (1 - \u03BB) * p(w | t)/p(w); see Sievert & Shirley (2014)");
+            .text("   see Sievert & Shirley (2014)");
 
         // Bind 'default' data to 'default' bar chart
         var basebars = chart.selectAll(".bar-totals")
@@ -544,7 +556,7 @@ LDAvis = function(to_select, json_file) {
             .attr("x", -5)
             .attr("class", "terms")
             .attr("y", function(d) {
-                return y(d.Term) + 12;
+                return y(d.Term) + 8;
             })
             .attr("cursor", "pointer")
             .attr("id", function(d) {
@@ -578,7 +590,7 @@ LDAvis = function(to_select, json_file) {
 
         var title = chart.append("text")
             .attr("x", barwidth/2)
-            .attr("y", -30)
+            .attr("y", -50)
             .attr("class", "bubble-tool") //  set class so we can remove it when highlight_off is called  
             .style("text-anchor", "middle")
             .style("font-size", "16px")
@@ -615,7 +627,7 @@ LDAvis = function(to_select, json_file) {
 
             var topicLabel = document.createElement("label");
             topicLabel.setAttribute("for", topicID);
-            topicLabel.setAttribute("style", "font-family: sans-serif; font-size: 14px");
+            topicLabel.setAttribute("style", "font-family: Helvetica; font-size: 14px");
             topicLabel.innerHTML = "Selected Topic: <span id='" + topicID + "-value'></span>";
             topicDiv.appendChild(topicLabel);
 
@@ -656,7 +668,7 @@ LDAvis = function(to_select, json_file) {
     	    inputDiv.appendChild(lambdaDiv);
 
     	    var lambdaZero = document.createElement("div");
-    	    lambdaZero.setAttribute("style", "padding: 5px; height: 20px; width: 220px; font-family: sans-serif; float: left");
+    	    lambdaZero.setAttribute("style", "padding: 5px; height: 20px; width: 220px; font-family: Helvetica; float: left");
 	    lambdaZero.setAttribute("id", "lambdaZero");
     	    lambdaDiv.appendChild(lambdaZero);
 	    var xx = d3.select("#lambdaZero")
@@ -692,7 +704,7 @@ LDAvis = function(to_select, json_file) {
             var lambdaLabel = document.createElement("label");
 	    lambdaLabel.setAttribute("id", "lamlabel");
             lambdaLabel.setAttribute("for", lambdaID);
-	    lambdaLabel.setAttribute("style", "height: 20px; width: 60px; font-family: sans-serif; font-size: 14px; margin-left: 80px");
+	    lambdaLabel.setAttribute("style", "height: 20px; width: 60px; font-family: Helvetica; font-size: 14px; margin-left: 80px");
 	    lambdaLabel.innerHTML = "&#955 = <span id='" + lambdaID + "-value'>" + vis_state.lambda + "</span>";
             lambdaDiv.appendChild(lambdaLabel);
 
@@ -812,7 +824,7 @@ LDAvis = function(to_select, json_file) {
                 .attr("x", -5)
                 .attr("class", "terms")
                 .attr("y", function(d) {
-                    return y(d.Term) + 12 + barheight + margin.bottom + 2 * rMax;
+                    return y(d.Term) + 8 + barheight + margin.bottom + 2 * rMax;
                 })
                 .attr("cursor", "pointer")
                 .style("text-anchor", "end")
@@ -1041,7 +1053,7 @@ LDAvis = function(to_select, json_file) {
             d3.select("#bar-freqs")
 		.append("text")
 		.attr("x", barwidth/2)
-		.attr("y", -30)
+		.attr("y", -50)
 		.attr("class", "bubble-tool") //  set class so we can remove it when highlight_off is called  
 		.style("text-anchor", "middle")
 		.style("font-size", "16px")
@@ -1099,7 +1111,7 @@ LDAvis = function(to_select, json_file) {
                 .data(dat3)
                 .attr("x", -5)
                 .attr("y", function(d) {
-                    return y(d.Term) + 12;
+                    return y(d.Term) + 8;
                 })
                 .attr("id", function(d) {
                     return (termID + d.Term)
@@ -1304,14 +1316,14 @@ LDAvis = function(to_select, json_file) {
             d3.select(".circleGuideLabelLarge")
                 .text(defaultLabelLarge);
             d3.select(".circleGuideLabelSmall")
-                .attr("y", mdsheight + 2 * newSmall)
+                .attr("y", mdsheight + 50 + 2 * newSmall)
                 .text(defaultLabelSmall);
             d3.select(".circleGuideSmall")
                 .attr("r", newSmall)
-                .attr("cy", mdsheight + newSmall);
+                .attr("cy", mdsheight + 50 + newSmall);
             d3.select(".lineGuideSmall")
-                .attr("y1", mdsheight + 2 * newSmall)
-                .attr("y2", mdsheight + 2 * newSmall);
+                .attr("y1", mdsheight + 50 + 2 * newSmall)
+                .attr("y2", mdsheight + 50 + 2 * newSmall);
         }
 
 
